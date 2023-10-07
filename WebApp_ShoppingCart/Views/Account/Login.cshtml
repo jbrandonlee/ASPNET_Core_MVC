@@ -2,6 +2,36 @@
 	ViewData["Title"] = "Login";
 }
 
+<!--https://getbootstrap.com/docs/4.0/components/forms/-->
+
+<style>
+	form div {
+		padding: .2em 0;
+	}
+	form button {
+		margin-top: 1em;
+	}
+</style>
+
 <div>
-	Account/Login
+	<h1 class="display-4">Login</h1><br />
+	<form>
+		<div class="form-group row">
+			<label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+			<div class="col-sm-4">
+				<input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+			<div class="col-sm-4">
+				<input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-4">
+				<button type="submit" class="btn btn-primary">Sign in</button>
+			</div>
+		</div>
+	</form>
 </div>
