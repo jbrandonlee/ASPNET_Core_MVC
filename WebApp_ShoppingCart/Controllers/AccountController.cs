@@ -9,7 +9,7 @@ namespace WebApp_ShoppingCart.Controllers
 	{
 		public IActionResult Login(string username, string password)
 		{
-			Console.WriteLine($"{username}, {password}");
+			// Console.WriteLine($"{username}, {password}");
 			if (username != null && password != null) {
 				return RedirectToAction("Index", "Gallery");
 			}

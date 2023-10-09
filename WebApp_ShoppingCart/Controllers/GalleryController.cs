@@ -8,7 +8,7 @@ namespace WebApp_ShoppingCart.Controllers
 {
     public class GalleryController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string search)
         {
             List<Product> products = DBProduct.GetMockProducts();
             ViewBag.products = products;
