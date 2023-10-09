@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using WebApp_ShoppingCart.Models;
 
+// Handles Cart & Checkout
 namespace WebApp_ShoppingCart.Controllers
 {
 	public class PurchaseController : Controller

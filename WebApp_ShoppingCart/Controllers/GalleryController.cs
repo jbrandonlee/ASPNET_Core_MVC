@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp_ShoppingCart.Models;
 using WebApp_ShoppingCart.Data;
 
+// Handles Product Gallery
 namespace WebApp_ShoppingCart.Controllers
 {
     public class GalleryController : Controller
