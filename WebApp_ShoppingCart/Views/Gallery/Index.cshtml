@@ -1,7 +1,54 @@
 ﻿@{
 	ViewData["Title"] = "Gallery";
+	var products = ViewBag.products;
 }
 
+<!--https://getbootstrap.com/docs/5.0/components/card/#grid-cards-->
+
+<style>
+	.desc-height-3 {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+		-webkit-box-orient: vertical;
+	}
+
+	.card {
+		max-width: 24rem;
+	}
+
+	.card-footer {
+		text-align: center;
+	}
+
+	.card-footer button {
+		width: 90%;
+	}
+</style>
+
 <div>
-	Gallery/Index
+	<h1 class="display-4">Gallery/Index</h1><br />
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+		@foreach (Product p in products)
+		{
+			string displayPrice = String.Format($"{p.Price:C2}");
+
+			<div class="col">
+				<div class="card">
+					<img src="@p.ImageUrl" class="card-img-top">
+					<div class="card-body">
+						<h5 class="card-title">@p.Name</h5>
+						<p class="card-text desc-height-3">@p.Description</p>
+					</div>
+					<div class="card-footer">
+						<button type="button" class="btn btn-primary">@displayPrice - Add to Cart</button>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
 </div>
+
