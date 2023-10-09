@@ -1,5 +1,6 @@
 ﻿@{
 	ViewData["Title"] = "My Cart";
+	if (String.IsNullOrEmpty((string?)ViewData["Username"])) { ViewData["Username"] = ", User"; }
 }
 
 <div>

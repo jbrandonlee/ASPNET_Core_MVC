@@ -16,3 +16,23 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Style Bootstrap Icons */
+i.bi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+li > a {
+    margin-right: 1em;
+}
+
+li > a > i.bi {
+    font-size: 1.5rem;
+}
+
+span.badge {
+    top: 25%;
+    left: 90%;
+}
