@@ -102,7 +102,7 @@ span.badge {
     font-size: 1.2em;
 }
 
-#body-cart .product-details > .row {
+#body-cart .product-details > .row, #body-history .product-details > .row {
     margin: .5em 0;
     line-height: 2.2rem;
 }
@@ -113,4 +113,12 @@ span.badge {
 
 #body-cart .product-details button {
     margin-top: 1em;
+}
+
+#body-history .card-footer {
+    text-align: center;
+}
+
+#body-history .card-footer button {
+    width: 90%;
 }
