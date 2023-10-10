@@ -4,44 +4,7 @@
 	var products = ViewBag.products;
 }
 
-<style>
-	.desc-height-3 {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		line-clamp: 3;
-		-webkit-box-orient: vertical;
-	}
-	
-	form {
-		margin-bottom: 2em;
-	}
-
-	#buttonSearch:hover {
-		background-color: #ced4da;
-	}
-
-	.card {
-		max-width: 24rem;
-	}
-
-	.card-footer {
-		text-align: center;
-	}
-
-	.card-footer button {
-		width: 90%;
-	}
-
-	
-</style>
-
-<!--https://getbootstrap.com/docs/5.0/components/card/#grid-cards-->
-<!--https://icons.getbootstrap.com/icons/search/-->
-
-<div>
+<div id="body-gallery">
 	<h1 class="display-4">Gallery/Index</h1><br />
 	<form id="formSearch">
 		<div class="input-group">

@@ -22,11 +22,12 @@ namespace WebApp_ShoppingCart.Data
 			return products;
 		}
 
-        public static List<Product> GetMockProducts()
+        public static List<Product> GetMockProducts(int num)
         {
             List<Product> products = new List<Product>();
+            if (num > 30) { num = 30; }
 
-            for (int i = 1; i <= 30; i++)
+            for (int i = 1; i <= num; i++)
             {
                 products.Add(new Product { Id = $"CA0{i.ToString().PadLeft(2,'0')}", Name = $"Item{i}", Price = (9.99 + i * 10), Description = $"0{i} " + GetMockDescription(), ImageUrl = $"/img/{i.ToString().PadLeft(3, '0')}.png" });
             }

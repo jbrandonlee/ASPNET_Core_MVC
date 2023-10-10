@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using WebApp_ShoppingCart.Data;
 using WebApp_ShoppingCart.Models;
 
 // Handles Cart & Checkout
@@ -9,6 +10,9 @@ namespace WebApp_ShoppingCart.Controllers
 	{
 		public IActionResult Index()
 		{
+			List<Product> products = DBProduct.GetMockProducts(5);
+			ViewBag.products = products;
+
 			return View();
 		}
 

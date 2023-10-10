@@ -10,7 +10,7 @@ namespace WebApp_ShoppingCart.Controllers
     {
         public IActionResult Gallery(string search)
         {
-            List<Product> products = DBProduct.GetMockProducts();
+            List<Product> products = DBProduct.GetMockProducts(30);
             ViewBag.products = products;
 
             return View();

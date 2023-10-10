@@ -17,7 +17,7 @@ body {
   margin-bottom: 60px;
 }
 
-/* Style Bootstrap Icons */
+/* Bootstrap Icons */
 i.bi {
     display: flex;
     align-items: center;
@@ -35,4 +35,82 @@ li > a > i.bi {
 span.badge {
     top: 25%;
     left: 90%;
+}
+
+/* Card Description */
+.desc-height-3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Account/Login */
+#body-login form div {
+    padding: .2em 0;
+}
+
+#body-login form button {
+    margin-top: 1em;
+}
+
+/* Shop/Gallery Styles */
+/* https://getbootstrap.com/docs/5.0/components/card/#grid-cards
+   https://icons.getbootstrap.com/icons/search/ */
+
+#body-gallery form#formSearch {
+    margin-bottom: 2em;
+}
+
+#body-gallery #buttonSearch:hover {
+    background-color: #ced4da;
+}
+
+#body-gallery .card {
+    max-width: 24rem;
+}
+
+#body-gallery .card-title, #body-gallery .card-footer {
+    text-align: center;
+}
+
+#body-gallery .card-footer button {
+    width: 90%;
+}
+
+/* Cart/Index Page Styles */
+#body-cart .product-row, #body-history .product-row {
+    padding: 1em 0;
+    border: 1px solid grey;
+    border-radius: 1rem;
+}
+
+#body-cart .product-row .card, #body-history .product-row .card {
+    max-width: 18rem;
+    margin: auto;
+}
+
+#body-cart .product-details-container, #body-history .product-details-container {
+    display: flex;
+    align-items: center;
+}
+
+#body-cart .product-details, #body-history .product-details {
+    width: 100%;
+    font-size: 1.2em;
+}
+
+#body-cart .product-details > .row {
+    margin: .5em 0;
+    line-height: 2.2rem;
+}
+
+#body-cart input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
+}
+
+#body-cart .product-details button {
+    margin-top: 1em;
 }

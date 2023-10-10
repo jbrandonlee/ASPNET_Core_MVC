@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using WebApp_ShoppingCart.Data;
 using WebApp_ShoppingCart.Models;
 
 // Handles Login, Logout, and Saved Account Data (Purchase History)
@@ -23,6 +24,9 @@ namespace WebApp_ShoppingCart.Controllers
 
 		public IActionResult History()
 		{
+			List<Product> products = DBProduct.GetMockProducts(5);
+			ViewBag.products = products;
+
 			return View();
 		}
 
