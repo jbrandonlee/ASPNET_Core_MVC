@@ -18,10 +18,10 @@ namespace WebApp_ShoppingCart.Controllers
 
 		public IActionResult Logout()
 		{
-			return View();
+			return RedirectToAction("Login", "Account");
 		}
 
-		public IActionResult Purchases()
+		public IActionResult History()
 		{
 			return View();
 		}

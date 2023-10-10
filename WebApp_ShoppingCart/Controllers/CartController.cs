@@ -5,14 +5,9 @@ using WebApp_ShoppingCart.Models;
 // Handles Cart & Checkout
 namespace WebApp_ShoppingCart.Controllers
 {
-	public class PurchaseController : Controller
+	public class CartController : Controller
 	{
-		public IActionResult Cart()
-		{
-			return View();
-		}
-
-		public IActionResult Checkout()
+		public IActionResult Index()
 		{
 			return View();
 		}

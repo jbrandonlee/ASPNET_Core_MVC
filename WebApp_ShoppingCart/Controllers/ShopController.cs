@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp_ShoppingCart.Models;
 using WebApp_ShoppingCart.Data;
 
-// Handles Product Gallery
+// Handles Shop Gallery
 namespace WebApp_ShoppingCart.Controllers
 {
-    public class GalleryController : Controller
+    public class ShopController : Controller
     {
-        public IActionResult Index(string search)
+        public IActionResult Gallery(string search)
         {
             List<Product> products = DBProduct.GetMockProducts();
             ViewBag.products = products;

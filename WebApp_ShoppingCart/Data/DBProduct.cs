@@ -8,10 +8,19 @@ namespace WebApp_ShoppingCart.Data
         {
             List<Product> products = new List<Product>();
 
-            // Code Here
+            // Code here to retrieve products from DB
 
             return products;
         }
+
+		public static List<Product> GetFilteredProducts(string search)
+		{
+			List<Product> products = GetDBProducts();
+
+			// Code here to filter products
+
+			return products;
+		}
 
         public static List<Product> GetMockProducts()
         {
@@ -19,7 +28,7 @@ namespace WebApp_ShoppingCart.Data
 
             for (int i = 1; i <= 30; i++)
             {
-                products.Add(new Product { Name = $"Item{i}", Price = (9.99 + i * 10), Description = $"0{i} " + GetMockDescription(), ImageUrl = $"/img/{(i % 10).ToString().PadLeft(3, '0')}.png" });
+                products.Add(new Product { Id = $"CA0{i.ToString().PadLeft(2,'0')}", Name = $"Item{i}", Price = (9.99 + i * 10), Description = $"0{i} " + GetMockDescription(), ImageUrl = $"/img/{i.ToString().PadLeft(3, '0')}.png" });
             }
 
             return products;
