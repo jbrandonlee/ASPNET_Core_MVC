@@ -48,7 +48,7 @@ namespace WebApp_ShoppingCart.Data
             using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
             {
                 conn.Open();
-                string sql = @"SELECT P.ProductName, P.Description, O.PurchaseDate, OD.Quantity as Quantity, OD.ActivationCode 
+                string sql = @"SELECT P.ProductName, P.Description, O.PurchaseDate, OD.Quantity, OD.ActivationCode 
                                FROM ProductList P, OrderHeader O, OrderDetails OD
                                WHERE P.ProductID = OD.ProductID AND O.OrderID = OD.OrderID";
                 SqlCommand cmd = new SqlCommand(sql, conn);
