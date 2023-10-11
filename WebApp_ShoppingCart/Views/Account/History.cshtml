@@ -1,10 +1,11 @@
 ﻿@{
 	ViewData["Title"] = "My Purchase History";
 	var products = ViewBag.products;
+
 }
 
 <div id="body-history">
-	<h1 class="display-4">Account/History</h1><br />
+	<h1 class="display-4">My Purchases</h1><br />
 	<div class="product-container">
 		@foreach (Product p in products)
 		{
@@ -13,7 +14,7 @@
 			<div class="row product-row justify-content-center mb-4">
 				<div class="col-6 col-md-4">
 					<div class="card">
-						<img src="/img/001.png" class="card-img-top">
+						<img src="/img/math.net.png" class="card-img-top">
 						<div class="card-body">
 							<h5 class="card-title">@p.Name</h5>
 							<p class="card-text desc-height-3">@p.Description</p>
@@ -27,15 +28,15 @@
 					<div class="product-details">
 						<div class="row">
 							<span class="col-5">Purchased On:</span>
-							<span class="col-7">DATE DATA HERE</span>
+							<span class="col-7">@p.Date</span>
 						</div>
 						<div class="row">
 							<span class="col-5">Quantity:</span>
-							<span class="col-7">QUANTITY DATA HERE</span>
+							<span class="col-7">@p.Quantity</span>
 						</div>
 						<div class="row">
 							<span class="col-5">Activation Code:</span>
-							<span class="col-7">DROPDOWN HERE</span>
+							<span class="col-7">@p.ActivationCode</span>
 						</div>
 					</div>
 				</div>

@@ -24,10 +24,10 @@ namespace WebApp_ShoppingCart.Controllers
 
 		public IActionResult History()
 		{
-			List<Product> products = DBProduct.GetMockProducts(5);
-			ViewBag.products = products;
+            List<Product> products = DBProduct.GetPurchaseHistory();
+            ViewBag.products = products;
 
-			return View();
+            return View();
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

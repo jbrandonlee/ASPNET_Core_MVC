@@ -7,5 +7,9 @@
 		public string Description { get; set; }
 		public double Price { get; set; }
 		public string? ImageUrl { get; set; }
-	}	
+		public string ActivationCode { get; set; }
+		public DateOnly Date { get; set; }
+		public int Quantity {  get; set; }
+
+    }	
 }
