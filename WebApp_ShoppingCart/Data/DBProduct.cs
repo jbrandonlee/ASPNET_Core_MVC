@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using WebApp_ShoppingCart.Models;
+using System;
+using System.Collections.Generic;
 
 namespace WebApp_ShoppingCart.Data
 {
@@ -10,8 +12,29 @@ namespace WebApp_ShoppingCart.Data
             List<Product> products = new List<Product>();
 
             // Code here to retrieve products from DB
+            using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+            {
+                conn.Open();
 
-            return products;
+                string sql = "SELECT ProductID, ProductName, Description, Price, ImageURL FROM ProductList";
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Product product = new Product
+                        {
+                            ProductID = (int)reader["ProductID"],
+                            ProductName = (string)reader["ProductName"],
+                            Description = (string)reader["Description"],
+                            Price = (decimal)reader["Price"],
+                            ImageURL = (string)reader("ImageURL")
+                        };
+                        products.Add(product);
+                    }
+                }
+            }
+                return products;
         }
 
 		public static List<Product> GetFilteredProducts(string search)
