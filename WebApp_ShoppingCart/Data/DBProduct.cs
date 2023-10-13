@@ -45,7 +45,7 @@ namespace WebApp_ShoppingCart.Data
             using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
             {
                 conn.Open();
-                string sql = @"SELECT P.ProductName, P.Description, O.PurchaseDate, OD.Quantity, OD.ActivationCode 
+                string sql = @"SELECT P.ProductName, P.Description, O.PurchaseDate, OD.ActivationCode 
                                FROM ProductList P, OrderHeader O, OrderDetails OD
                                WHERE P.ProductID = OD.ProductID AND O.OrderID = OD.OrderID";
                 SqlCommand cmd = new SqlCommand(sql, conn);
@@ -58,8 +58,7 @@ namespace WebApp_ShoppingCart.Data
                         Name = (string)reader["ProductName"],
                         Description = (string)reader["Description"],
                         ActivationCode = (string)reader["ActivationCode"],
-                        Date = DateOnly.FromDateTime((DateTime)reader["PurchaseDate"]),
-                        Quantity = (int)reader["Quantity"]
+                        Date = DateOnly.FromDateTime((DateTime)reader["PurchaseDate"])
                     };
                     products.Add(product);
                 }
