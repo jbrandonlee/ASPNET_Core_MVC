@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApp_ShoppingCart.Models;
 using WebApp_ShoppingCart.Data;
+using System.Text.Json;
 
 // Handles Shop Gallery
 namespace WebApp_ShoppingCart.Controllers
@@ -40,10 +41,13 @@ namespace WebApp_ShoppingCart.Controllers
             }
             return result;
         }
-        public IActionResult Click(int id)
+        
+        //get the data from js
+        [HttpPost]
+        public IActionResult Click([FromBody] string productid)
         {
-
-            return null;
+            
+            return View("Index","Cart");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

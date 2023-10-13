@@ -1,4 +1,8 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿function addproduct(productid) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "ShopController/Click");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () { }
+    var data = JSON.stringify({ productid: productid });
+    xhr.send(data);
+}
