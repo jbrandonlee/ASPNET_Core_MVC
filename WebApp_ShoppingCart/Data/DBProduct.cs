@@ -7,53 +7,27 @@ namespace WebApp_ShoppingCart.Data
 {
     public static class DBProduct
     {
-        public static List<Product> GetDBProducts()
+        public static List<Product> GetProducts()
         {
             List<Product> products = new List<Product>();
-
-            // Code here to retrieve products from DB
             using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
             {
                 conn.Open();
+                string sql = @"SELECT ProductID, ProductName, Price,Description From ProductList";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
 
-                string sql = "SELECT ProductID, ProductName, Description, Price, ImageURL FROM ProductList";
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    Product product = new Product()
                     {
-                        Product product = new Product
-                        {
-                            ProductID = (int)reader["ProductID"],
-                            ProductName = (string)reader["ProductName"],
-                            Description = (string)reader["Description"],
-                            Price = (decimal)reader["Price"],
-                            ImageURL = (string)reader("ImageURL")
-                        };
-                        products.Add(product);
-                    }
+                        Name = (string)reader["ProductName"],
+                        Description = (string)reader["Description"],
+                        Price = (decimal)reader["Price"],
+                        Id = (string)reader["ProductID"]
+                    };
+                    products.Add(product);
                 }
-            }
-                return products;
-        }
-
-		public static List<Product> GetFilteredProducts(string search)
-		{
-			List<Product> products = GetDBProducts();
-
-			// Code here to filter products
-
-			return products;
-		}
-
-        public static List<Product> GetMockProducts(int num)
-        {
-            List<Product> products = new List<Product>();
-            if (num > 30) { num = 30; }
-
-            for (int i = 1; i <= num; i++)
-            {
-                products.Add(new Product { Id = $"CA0{i.ToString().PadLeft(2,'0')}", Name = $"Item{i}", Price = (9.99 + i * 10), Description = $"0{i} " + GetMockDescription(), ImageUrl = $"/img/{i.ToString().PadLeft(3, '0')}.png" });
             }
 
             return products;
