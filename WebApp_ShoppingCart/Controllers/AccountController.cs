@@ -8,12 +8,29 @@ namespace WebApp_ShoppingCart.Controllers
 {
 	public class AccountController : Controller
 	{
-		public IActionResult Login(string username, string password)
+		/*	For testing purposes, use the following username/password/passhash:
+		 *	admin, Password123, b2e98ad6f6eb8508dd6a14cfa704bad7f05f6fb1
+		 *	john, password1, e38ad214943daad1d64c102faec29de4afe9da3d
+		 */
+
+		public IActionResult Login(string username, string passhash)
 		{
-			// Console.WriteLine($"{username}, {password}");
-			if (username != null && password != null) {
-				return RedirectToAction("Index", "Gallery");
+			Dictionary<string, string> users = DBUser.GetUserDict();
+
+			if (username == null && passhash == null)       // No prior login was attempted
+			{
+				return View();
 			}
+			else if (users.ContainsKey(username.ToLower()))			// Login was attempted
+			{
+				if (users[username.ToLower()] == passhash)			// Login success
+				{
+					return RedirectToAction("Gallery", "Shop");
+				}
+			}
+
+			// Login attempt fails
+			ViewBag.loginError = "The username or password entered is incorrect. Please try again.";
 			return View();
 		}
 

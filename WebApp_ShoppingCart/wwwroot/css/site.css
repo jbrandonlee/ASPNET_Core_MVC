@@ -52,14 +52,18 @@ span.badge {
     padding: .2em 0;
 }
 
-#body-login form button {
+#body-login form button, #body-login #errorMsg {
     margin-top: 1em;
+}
+
+#body-login #buttonContainer {
+    display: flex;
+    justify-content: end;
 }
 
 /* Shop/Gallery Styles */
 /* https://getbootstrap.com/docs/5.0/components/card/#grid-cards
    https://icons.getbootstrap.com/icons/search/ */
-
 #body-gallery form#formSearch {
     margin-bottom: 2em;
 }

@@ -8,6 +8,7 @@ namespace WebApp_ShoppingCart
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession();
 
             var app = builder.Build();
 
@@ -25,6 +26,8 @@ namespace WebApp_ShoppingCart
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
