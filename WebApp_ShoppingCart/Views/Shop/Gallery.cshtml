@@ -4,11 +4,8 @@
 	var products = ViewBag.products;
 }
 
-@section Scripts
-{
-	<script src="/js/shoppingcart.js"></script>
-}
 <div id="body-gallery">
+	<script src="~/js/site.js"></script>
 	<h1 class="display-4">Gallery/Index</h1><br />
 	<form id="formSearch">
 		<div class="input-group">
@@ -32,11 +29,7 @@
 						<p class="card-text desc-height-3">@p.Description</p>
 					</div>
 					<div class="card-footer">
-						
-						
-						<button type="button" class="btn btn-primary" onclick="addproduct('@p.Id')">@displayPrice - Add to Cart</button>
-						
-
+						<button type="button" class="btn btn-primary" onclick=" addtocart('@p.Id')">@displayPrice - Add to Cart</button>
 					</div>
 				</div>
 			</div>

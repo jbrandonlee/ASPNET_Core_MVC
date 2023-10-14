@@ -41,16 +41,22 @@ namespace WebApp_ShoppingCart.Controllers
             }
             return result;
         }
-        
-        //get the data from js
-        [HttpPost]
-        public IActionResult Click([FromBody] string productid)
-        {
-            
-            return View("Index","Cart");
-        }
+		//the add to cart function//
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		[HttpPost]
+		public IActionResult AddToCart([FromBody] Product products)
+		{
+			string productid = products.Id;
+			DBProduct cart = new DBProduct();
+			if (productid != null)
+			{
+				Product product = DBProduct.GetProductsbyid(productid);
+				cart.AddToCart(product);
+			}
+			return Ok();
+		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

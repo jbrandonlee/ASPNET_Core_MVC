@@ -11,5 +11,7 @@
 		public DateOnly Date { get; set; }
 		public int Quantity {  get; set; }
 
-    }	
+		public string CustomerCode { get; set; }
+
+	}	
 }
