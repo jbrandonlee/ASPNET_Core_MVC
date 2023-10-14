@@ -10,8 +10,13 @@ namespace WebApp_ShoppingCart.Controllers
 	{
 		public IActionResult Index()
 		{
-			ViewBag.Product = DBProduct.GetCartProducts();
+			ViewBag.Cart = DBCart.GetCartItems("john");
 			return View();
+		}
+
+		public IActionResult Checkout()
+		{
+			return RedirectToAction("History", "Account");
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

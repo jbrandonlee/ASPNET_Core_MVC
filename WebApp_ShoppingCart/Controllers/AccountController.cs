@@ -17,7 +17,7 @@ namespace WebApp_ShoppingCart.Controllers
 		{
 			Dictionary<string, string> users = DBUser.GetUserDict();
 
-			if (username == null && passhash == null)       // No prior login was attempted
+			if (username == null && passhash == null)				// No prior login was attempted
 			{
 				return View();
 			}
@@ -41,8 +41,8 @@ namespace WebApp_ShoppingCart.Controllers
 
 		public IActionResult History()
 		{
-            List<Product> products = DBProduct.GetPurchaseHistory();
-            ViewBag.products = products;
+            List<Purchase> purchases = DBPurchase.GetPurchaseHistory("john");
+            ViewBag.purchases = purchases;
 
             return View();
 		}

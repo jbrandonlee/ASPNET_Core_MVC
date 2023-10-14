@@ -1,57 +1,30 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using WebApp_ShoppingCart.Models;
 using WebApp_ShoppingCart.Data;
-using System.Text.Json;
+using WebApp_ShoppingCart.Models;
 
-// Handles Shop Gallery
+// Handles Shop Gallery & Add-To-Cart
 namespace WebApp_ShoppingCart.Controllers
 {
     public class ShopController : Controller
     {
-
         public IActionResult Gallery(string search)
         {
-            List<Product> products = DBProduct.GetProducts();
-            if (search == null)
-            {
-                ViewBag.products = products;
-            }
-            else
-            {
-                ViewBag.products = Searchproduct(search, products);
-            }
-            return View();
-        }
+            List<Product> products;
+            products = String.IsNullOrEmpty(search) ? DBProduct.GetProducts() : DBProduct.GetFilteredProducts(search);
 
-        private List<Product> Searchproduct(string search, List<Product> products)
-        {
-            List<Product> result = new List<Product>();
-            foreach (Product product in products)
-            {
-                if (product.Name != null)
-                {
-                    string productlo = product.Name.ToLower();
-                    string searchlo = search.ToLower();
-                    if (productlo.Contains(searchlo))
-                    {
-                        result.Add(product);
-                    }
-                }
-            }
-            return result;
+			ViewBag.products = products;
+			return View();
         }
-		//the add to cart function//
 
 		[HttpPost]
-		public IActionResult AddToCart([FromBody] Product products)
+		public IActionResult AddToCart(string username, string productId)
 		{
-			string productid = products.Id;
-			DBProduct cart = new DBProduct();
-			if (productid != null)
+			if (!String.IsNullOrEmpty(productId))
 			{
-				Product product = DBProduct.GetProductsbyid(productid);
-				cart.AddToCart(product);
+				Product product = DBProduct.GetProductById(productId);
+				CartItem cartItem = CartItem.ConvertToCartItem(product, username, 1);
+				DBCart.AddToCart(cartItem);
 			}
 			return Ok();
 		}

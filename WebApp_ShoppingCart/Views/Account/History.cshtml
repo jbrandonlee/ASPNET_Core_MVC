@@ -1,20 +1,20 @@
 ﻿@{
 	ViewData["Title"] = "My Purchase History";
-	var products = ViewBag.products;
+	var purchases = ViewBag.purchases;
 
 }
 
 <div id="body-history">
 	<h1 class="display-4">My Purchases</h1><br />
 	<div class="product-container">
-		@foreach (Product p in products)
+		@foreach (Purchase p in purchases)
 		{
 			string displayPrice = String.Format($"{p.Price:C2}");
 
 			<div class="row product-row justify-content-center mb-4">
 				<div class="col-6 col-md-4">
 					<div class="card">
-						<img src="/img/math.net.png" class="card-img-top">
+						<img src=@p.ImageUrl class="card-img-top">
 						<div class="card-body">
 							<h5 class="card-title">@p.Name</h5>
 							<p class="card-text desc-height-3">@p.Description</p>
@@ -27,19 +27,32 @@
 				<div class="col-6 col-md-4 product-details-container">
 					<div class="product-details">
 						<div class="row">
+							<span class="col-5">Order ID:</span>
+							<span class="col-7">@p.OrderId</span>
+						</div>
+						<div class="row">
 							<span class="col-5">Purchased On:</span>
 							<span class="col-7">@p.Date</span>
 						</div>
 						<div class="row">
 							<span class="col-5">Quantity:</span>
-							<span class="col-7">@p.Quantity</span>
+							<span class="col-7">@p.ActivationCode.Count()</span>
 						</div>
 						<div class="row">
 							<span class="col-5">Activation Code:</span>
                             <span class="col-7">
-                                <select id="ActivationCode" name="ActivationCode">
-                                    <option value="ActivationCode">@p.ActivationCode</option>
-                                </select>
+								@if(p.ActivationCode.Count() == 1)
+								{
+									@p.ActivationCode[0];
+								} else
+								{
+									<select id="ActivationCode" name="ActivationCode">
+										@foreach (string code in p.ActivationCode)
+										{
+											<option value="ActivationCode">@code</option>
+										}
+									</select>
+								}
                             </span>
 						</div>
 					</div>

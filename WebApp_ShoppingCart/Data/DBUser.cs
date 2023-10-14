@@ -20,8 +20,8 @@ namespace WebApp_ShoppingCart.Data
 				while (reader.Read())
 				{
 					string username = (string)reader["Username"];
-					string password = (string)reader["Password"];
-					users.Add(username, password);
+					string passhash = (string)reader["Passhash"];
+					users.Add(username, passhash);
 				}
 			}
 
