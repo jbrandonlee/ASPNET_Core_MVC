@@ -13,9 +13,9 @@ namespace WebApp_ShoppingCart.Data
 			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
 			{
 				conn.Open();
-				string sql = @"SELECT P.ProductID, P.ProductName, P.Description, O.OrderId, O.CustomerCode, O.PurchaseDate, OD.ActivationCode 
+				string sql = @"SELECT P.ProductID, P.ProductName, P.Description, O.OrderId, O.PurchaseDate, OD.ActivationCode 
                                FROM ProductList P, OrderHeader O, OrderDetails OD
-                               WHERE P.ProductID = OD.ProductID AND O.OrderID = OD.OrderID AND O.CustomerCode = @Username 
+                               WHERE P.ProductID = OD.ProductID AND O.OrderID = OD.OrderID AND O.CustomerID = @Username 
 							   ORDER BY PurchaseDate, ProductID";
 				SqlCommand cmd = new SqlCommand(sql, conn);
 				cmd.Parameters.AddWithValue("@Username", username);
