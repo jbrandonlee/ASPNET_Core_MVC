@@ -88,5 +88,39 @@ namespace WebApp_ShoppingCart.Data
 				}
 			}
 		}
+
+		//Change a item
+		public static void ChangeCart(string Id,int Quantity)
+		{
+			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			{
+				conn.Open();
+				string updateSql = @"UPDATE Cart SET Quantity = @quantity 
+                             WHERE ProductID = @productid";
+
+				SqlCommand cmd = new SqlCommand(updateSql, conn);
+				cmd.Parameters.AddWithValue("@productid", Id);
+				cmd.Parameters.AddWithValue("@quantity", Quantity);
+				cmd.ExecuteNonQuery();
+			}
+		}
+
+		//Delete a item
+		public static void DeleteCart(string customer,string productId)
+		{
+			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			{
+				conn.Open();
+				string deleteSql = @"DELETE From Cart
+                             WHERE ProductID = @productid and CustomerID=@customer";
+
+				SqlCommand cmd = new SqlCommand(deleteSql, conn);
+				cmd.Parameters.AddWithValue("@productid", productId);
+				cmd.Parameters.AddWithValue("@customer", customer);
+				cmd.ExecuteNonQuery();
+
+			}
+
+		}
 	}
 }

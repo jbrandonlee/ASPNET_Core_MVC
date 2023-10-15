@@ -11,9 +11,10 @@
             } else {
                 // Report Error
                 console.error("Error adding product to cart. Status code: " + xhr.status);
-            }
+            }   
         }
     };
-
     xhr.send("username=" + "john" + "&productId=" + productId);
+
 }
+

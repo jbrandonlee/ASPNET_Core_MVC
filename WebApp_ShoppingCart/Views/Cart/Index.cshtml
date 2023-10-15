@@ -6,8 +6,8 @@
 
 <div id="body-cart">
 	<h1 class="display-4">Cart/Index</h1><br />
-
 	<div class="product-container">
+		<script src="~/js/cart.js"></script>
 		@if (cart != null && cart.Count > 0)
 		{
 			@foreach (CartItem c in cart)
@@ -32,11 +32,11 @@
 							</div>
 							<div class="row">
 								<span class="col-4">Quantity:</span>
-								<span class="col-8"><input type="number" class="form-control"value="@c.Quantity" style="max-width:5rem" /></span>
+								<span class="col-8"><input type="number" class="form-control" value="@c.Quantity" oninput="changeitem('@c.Id',this.value,'@c.CustomerId')" style="max-width:5rem" /></span>
 							</div>
 							<div class="row">
 								<span class="col-4"></span>
-								<span class="col-8"><button class="btn btn-danger">Remove</button></span>
+								<span class="col-8"><button class="btn btn-danger" onclick="deleteitem('@c.CustomerId','@c.Id')">Remove</button></span>
 							</div>
 						</div>
 					</div>
