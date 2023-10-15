@@ -75,7 +75,8 @@ namespace WebApp_ShoppingCart.Controllers
 				List<Purchase> purchases = DBPurchase.GetPurchaseHistory(userId);
 				ViewBag.purchases = purchases;
                 ViewBag.cartCount = DBCart.GetUniqueCount(userId);
-                return View();
+				ViewBag.username = HttpContext.Session.GetString("userId");
+				return View();
 			}
 		}
 

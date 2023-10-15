@@ -3,63 +3,46 @@
 }
 
 @section Scripts {
-	<script src="~/js/sha1.js"></script>
+	<script src="/js/sha1.js"></script>
+	<script src="/js/login.js" defer></script>
+	<style>
+		nav.navbar {
+			display: none;
+		}
+	</style>
 }
 
-<!--https://getbootstrap.com/docs/5.3/forms/validation/-->
-
-<div id="body-login">
-	<h1 class="display-4">Login</h1><br />
-	<form action="~/" method="POST" id="formLogin">
-		<div class="form-group row">
-			<label for="username" class="col-sm-2 col-form-label">Username</label>
-			<div class="col-sm-8 col-md-6 col-lg-4">
-				<input type="text" class="form-control" name="username" id="username" placeholder="Username">
-			</div>
-		</div>
-		<div class="form-group row">
-			<label for="password" class="col-sm-2 col-form-label">Password</label>
-			<div class="col-sm-8 col-md-6 col-lg-4">
-				<input type="password" class="form-control" name="password" id="password" placeholder="Password">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-8 col-md-6 col-lg-4" id="buttonContainer">
-				<button type="submit" class="btn btn-primary" id="login" disabled>Sign in</button>
-			</div>
-			<div class="col-sm-2 col-md-4 col-lg-6"></div>
-		</div>
-		<input type="hidden" id="passhash" name="passhash" />
-	</form>
+<div id="body-login" class="pt-5">
 	<div class="row">
-		<div class="col-sm-10 col-md-8 col-lg-6" id="errorMsg">@ViewBag.loginError</div>
+		<div class="col-3"></div>
+		<div class="col-6">
+			<h1 class="display-4">Login</h1><br />
+			<form action="~/" method="POST" id="formLogin">
+				<div class="form-group row">
+					<label for="username" class="col-3 col-form-label">Username</label>
+					<div class="col-9">
+						<input type="text" class="form-control" name="username" id="username" placeholder="Username">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="password" class="col-3 col-form-label">Password</label>
+					<div class="col-9">
+						<input type="password" class="form-control" name="password" id="password" placeholder="Password">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-3"></div>
+					<div class="col-9" id="buttonContainer">
+						<button type="submit" class="btn btn-primary" id="login" disabled>Sign in</button>
+					</div>
+					
+				</div>
+				<input type="hidden" id="passhash" name="passhash" />
+			</form>
+			<div class="row">
+				<div class="col-12" id="errorMsg">@ViewBag.loginError</div>
+			</div>
+		</div>
+		<div class="col-3"></div>
 	</div>
-	
 </div>
-
-<script>
-	let formLogin = document.getElementById("formLogin");
-	let inputUsername = document.getElementById("username");
-	let inputPassword = document.getElementById("password");
-	let hashPassword = document.getElementById("passhash");
-	let buttonLogin = document.getElementById("login");
-	let errorMsg = document.getElementById("errorMsg");
-
-	// Check if fields are filled before allowing login
-	formLogin.addEventListener("change", function (e) {
-		buttonLogin.disabled = (inputUsername.value === "" || inputPassword.value === "") ? true : false;
-	})
-
-	// Hash password to be submitted as part of form to server
-	formLogin.addEventListener("submit", function (e) {
-		let hash = CryptoJS.SHA1(inputPassword.value);
-		hashPassword.value = hash.toString();
-	});
-
-	// Display error message styles if error message exists
-	if (errorMsg.innerHTML != "") {
-		errorMsg.classList.add("alert");
-		errorMsg.classList.add("alert-warning");
-	}
-</script>

@@ -10,8 +10,8 @@ namespace WebApp_ShoppingCart.Controllers
 	{
 		public IActionResult Index()
 		{
-			string isRegistered = HttpContext.Session.GetString("isRegistered");
-			string userId = HttpContext.Session.GetString("userId");
+			string? isRegistered = HttpContext.Session.GetString("isRegistered");
+			string? userId = HttpContext.Session.GetString("userId");
 			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
 
 			if (String.IsNullOrEmpty(isRegistered))                                     // If not logged in
@@ -34,8 +34,8 @@ namespace WebApp_ShoppingCart.Controllers
 		[HttpPost]
 		public IActionResult UpdateCartItem(string productId, int quantity)
 		{
-			string isRegistered = HttpContext.Session.GetString("isRegistered");
-			string userId = HttpContext.Session.GetString("userId");
+			string? isRegistered = HttpContext.Session.GetString("isRegistered");
+			string? userId = HttpContext.Session.GetString("userId");
 			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
 
 			DBCart.UpdateQuantity(productId, quantity, userId);
@@ -45,8 +45,8 @@ namespace WebApp_ShoppingCart.Controllers
 		[HttpPost]
 		public IActionResult RemoveCartItem(string productId)
 		{
-			string isRegistered = HttpContext.Session.GetString("isRegistered");
-			string userId = HttpContext.Session.GetString("userId");
+			string? isRegistered = HttpContext.Session.GetString("isRegistered");
+			string? userId = HttpContext.Session.GetString("userId");
 			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
 
 			DBCart.RemoveItem(productId, userId);

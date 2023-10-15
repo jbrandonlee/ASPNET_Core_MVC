@@ -1,6 +1,32 @@
 ﻿@{
 	ViewData["Title"] = "My Purchase History";
+	var currUser = (String.IsNullOrEmpty(ViewBag.username)) ? "User" : ViewBag.username;
 	var purchases = ViewBag.purchases;
+}
+
+@section Scripts {
+	<script src="/js/gallery.js" defer></script>
+}
+
+@section NavLeft {
+	<a class="navbar-brand pe-2">Hello, <span>@currUser</span></a>
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+			aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+}
+
+@section NavLink {
+	<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+		<ul class="navbar-nav flex-grow-1">
+			<li class="nav-item">
+				<a class="nav-link text-primary" asp-area="" asp-controller="Shop" asp-action="Gallery"><u>Home</u></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link text-primary" asp-area="" asp-controller="Account" asp-action="Logout"><u>Logout</u></a>
+			</li>
+		</ul>
+	</div>
 }
 
 <div id="body-history">

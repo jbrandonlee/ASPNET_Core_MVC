@@ -48,6 +48,8 @@ span.badge {
 }
 
 /* Account/Login */
+/* https://getbootstrap.com/docs/5.3/forms/validation/ */
+
 #body-login form div {
     padding: .2em 0;
 }
