@@ -1,48 +1,77 @@
-﻿
-function changeitem(Id,quantity,customer)
-{
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/Cart/ChangeItem");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function ()
-    {
-        if (xhr.readyState === XMLHttpRequest.DONE)
-        {
-            if (xhr.status === 200)
-            {
-                // Succeed
-                console.log("Change cart successfully.");
-            }
-            else
-            {
-                // Report Error
-                console.error("Error changing cart. Status code: " + xhr.status);
-            }
-        }
-    }
-    var data = "Id=" +Id + "&quantity=" + quantity + "&customer=" + customer;
+﻿// Initialize Total Price
+UpdatePriceDisplay();
 
-    xhr.send(data);
+// Add 'Input' EventListeners to all QuantityChange fields
+let quantityBtns = document.getElementsByClassName("btn-changeQuantity");
+
+for (let i = 0; i < quantityBtns.length; i++) {
+	quantityBtns[i].addEventListener("input", function (e) {
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", "/Cart/UpdateCartItem");
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+		console.log("productId=" + e.currentTarget.dataset.productId + "&quantity=" + e.currentTarget.value)
+		xhr.send("productId=" + e.currentTarget.dataset.productId + "&quantity=" + e.currentTarget.value);
+		UpdatePriceDisplay();
+
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
+				if (xhr.status === 200) {
+					// Succeed
+					console.log("Change cart successfully.");
+				} else {
+					// Report Error
+					console.error("Error changing cart. Status code: " + xhr.status);
+				}
+			}
+		}
+	})
 }
 
+// Add 'Click' EventListeners to all Remove buttons
+let removeBtns = document.getElementsByClassName("btn-removeItem");
 
-function deleteitem(customer,productId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/Cart/DeleteItem");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                // Succeed
-                console.log("Delete cart successfully.");
-            }
-            else {
-                // Report Error
-                console.error("Error deleting cart. Status code: " + xhr.status);
-            }
-        }
-    }
-    var data = "Id=" + productId + "&customer=" + customer;
-    console.log(data);
-    xhr.send(data);
+for (let i = 0; i < removeBtns.length; i++) {
+	removeBtns[i].addEventListener("click", function (e) {
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", "/Cart/RemoveCartItem");
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+		console.log("productId=" + e.currentTarget.dataset.productId)
+		xhr.send("productId=" + e.currentTarget.dataset.productId);
+		RemoveDivById(e.currentTarget.dataset.productId);
+		UpdatePriceDisplay();
+
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
+				if (xhr.status === 200) {
+					// Succeed
+					console.log("Removed item successfully.");
+					UpdateCartCountTo(JSON.parse(this.responseText).cartCount);
+				} else {
+					// Report Error
+					console.error("Error removing item. Status code: " + xhr.status);
+				}
+			}
+		};
+	})
+}
+
+// Helper functions
+function RemoveDivById(productId) {
+	let divId = "item-container-" + productId;
+	let div = document.getElementById(divId);
+	div.remove();
+}
+
+function UpdatePriceDisplay() {
+	let cartItems = document.getElementsByClassName("btn-changeQuantity");
+	let sum = 0;
+
+	for (let i = 0; i < cartItems.length; i++) {
+		sum += cartItems[i].dataset.productPrice * cartItems[i].value;
+	}
+
+	let priceDisplay = document.getElementById("total-price-display");
+	priceDisplay.innerHTML = sum.toFixed(2);
 }

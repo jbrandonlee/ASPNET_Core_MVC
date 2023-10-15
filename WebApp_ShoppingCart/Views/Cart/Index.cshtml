@@ -4,39 +4,43 @@
 	var cart = ViewBag.Cart;
 }
 
+@section Scripts {
+	<script src="/js/cart.js" defer></script>
+}
+
 <div id="body-cart">
 	<h1 class="display-4">Cart/Index</h1><br />
+	<p>Total: $<span id="total-price-display">0.00</span></p>
 	<div class="product-container">
-		<script src="~/js/cart.js"></script>
 		@if (cart != null && cart.Count > 0)
 		{
 			@foreach (CartItem c in cart)
-			{
-				string displayPrice = String.Format($"{c.Price:C2}");
-
-				<div class="row product-row justify-content-center mb-4">
-					<div class="col-6 col-md-4">
-						<div class="card">
-							<img src="@c.ImageUrl" class="card-img-top">
-							<div class="card-body">
-								<h5 class="card-title">@c.Name</h5>
-								<p class="card-text desc-height-3">@c.Description</p>
+			{				
+				<div id="item-container-@c.Id">
+					<div class="row product-row justify-content-center mb-4">
+						<div class="col-6 col-md-4">
+							<div class="card">
+								<img src="@c.ImageUrl" class="card-img-top">
+								<div class="card-body">
+									<h5 class="card-title">@c.Name</h5>
+									<p class="card-text desc-height-3">@c.Description</p>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col-6 col-md-4 product-details-container">
-						<div class="product-details">
-							<div class="row">
-								<span class="col-4">Price:</span>
-								<span class="col-8">@displayPrice</span>
-							</div>
-							<div class="row">
-								<span class="col-4">Quantity:</span>
-								<span class="col-8"><input type="number" class="form-control" value="@c.Quantity" oninput="changeitem('@c.Id',this.value,'@c.CustomerId')" style="max-width:5rem" /></span>
-							</div>
-							<div class="row">
-								<span class="col-4"></span>
-								<span class="col-8"><button class="btn btn-danger" onclick="deleteitem('@c.CustomerId','@c.Id')">Remove</button></span>
+						<div class="col-6 col-md-4 product-details-container">
+							<div class="product-details">
+								<div class="row">
+									<span class="col-4">Price:</span>
+									<span class="col-8">$@c.Price</span>
+								</div>
+								<div class="row">
+									<span class="col-4">Quantity:</span>
+									<span class="col-8"><input type="number" class="form-control btn-changeQuantity" min="1" data-product-id="@c.Id" data-product-price="@c.Price" value="@c.Quantity" style="max-width:5rem" /></span>
+								</div>
+								<div class="row">
+									<span class="col-4"></span>
+									<span class="col-8"><button class="btn btn-danger btn-removeItem" data-product-id="@c.Id">Remove</button></span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -49,3 +53,8 @@
 		}
 	</div>
 </div>
+
+<script defer>
+
+</script>
+

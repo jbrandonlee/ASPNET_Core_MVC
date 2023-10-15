@@ -9,15 +9,18 @@ namespace WebApp_ShoppingCart.Data
 		// (For View) Returns list of cart items by username
 		public static List<CartItem> GetCartItems(string username)
 		{
+			if (String.IsNullOrEmpty(username)) { return null; }
+
 			List<CartItem> cartItems = new List<CartItem>();
 			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
 			{
 				conn.Open();
 				string sql = @"SELECT P.ProductID, P.ProductName, P.Description, P.Price, C.CustomerID, C.Quantity 
 							   FROM ProductList P, Cart C
-							   WHERE P.ProductID = C.ProductID";
+							   WHERE P.ProductID = C.ProductID AND C.CustomerID = @CustomerId";
 
 				SqlCommand cmd = new SqlCommand(sql, conn);
+				cmd.Parameters.AddWithValue("@CustomerId", username);
 				SqlDataReader reader = cmd.ExecuteReader();
 
 				while (reader.Read())
@@ -38,7 +41,31 @@ namespace WebApp_ShoppingCart.Data
 			}
 		}
 
-		public static bool IsItemInCart(string id)
+		// (For View) Returns number of unique items in cart
+		public static int GetUniqueCount(string username)
+		{
+			if (String.IsNullOrEmpty(username)) { return 0; }
+
+			List<CartItem> cartItems = new List<CartItem>();
+			int count;
+
+			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			{
+				conn.Open();
+				string sql = @"SELECT COUNT(*) FROM Cart
+							   WHERE CustomerID = @CustomerId";
+
+				SqlCommand cmd = new SqlCommand(sql, conn);
+				cmd.Parameters.AddWithValue("@CustomerId", username);
+				
+				count = (int)cmd.ExecuteScalar();
+			}
+			return count;
+		}
+
+		// Checks if item is already in cart
+		// Helper function for AddToCart()
+		public static bool IsItemInCart(string id, string username)
 		{
 			if (String.IsNullOrEmpty(id)) { return false; }
 
@@ -46,39 +73,41 @@ namespace WebApp_ShoppingCart.Data
 			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
 			{
 				conn.Open();
-				string sql = @"SELECT COUNT(*) FROM Cart WHERE ProductID = @ProductId";
+				string sql = @"SELECT COUNT(*) FROM Cart WHERE ProductID = @ProductId AND CustomerID = @CustomerId";
 
 				SqlCommand cmd = new SqlCommand(sql, conn);
 				cmd.Parameters.AddWithValue("@ProductId", id);
+				cmd.Parameters.AddWithValue("@CustomerId", username);
 
 				count = (int)cmd.ExecuteScalar();
 			}
 			return (count > 0);
 		}
 
-		// Handles Adding New Item to Cart or Increasing Quantity
+		// Handles adding new item to Cart or increasing quantity
 		public static void AddToCart(CartItem cartItem)
 		{
 			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
 			{
 				conn.Open();
 
-				if (!IsItemInCart(cartItem.Id))
+				if (!IsItemInCart(cartItem.Id, cartItem.CustomerId))
 				{
-					// If Item does not exists in Cart, Add to Cart
-					string sql = @"INSERT INTO Cart(ProductID, Quantity, CustomerID) 
-								   VALUES(@productid,@productquantity,@customerid);
+					// If Item does not exist in Cart, add to cart
+					string sql = @"INSERT INTO Cart(ProductID, Quantity, CustomerID, Date) 
+								   VALUES(@productid,@productquantity,@customerid, @date);
 								   SELECT SCOPE_IDENTITY();";
 					SqlCommand cmd = new SqlCommand(sql, conn);
 
 					cmd.Parameters.AddWithValue("@productid", cartItem.Id);
-					cmd.Parameters.AddWithValue("@productquantity", 1);
-					cmd.Parameters.AddWithValue("@customerid", "john");
+					cmd.Parameters.AddWithValue("@productquantity", cartItem.Quantity);
+					cmd.Parameters.AddWithValue("@customerid", cartItem.CustomerId);
+					cmd.Parameters.AddWithValue("@date", cartItem.Date);
 					cmd.ExecuteNonQuery();
 				}
 				else
 				{
-					// If Item already exists in Cart, Update Quantity
+					// If Item already exists in Cart, update quantity
 					string updateSql = @"UPDATE Cart SET Quantity = Quantity + 1 
                              WHERE ProductID = @productid";
 
@@ -89,38 +118,39 @@ namespace WebApp_ShoppingCart.Data
 			}
 		}
 
-		//Change a item
-		public static void ChangeCart(string Id,int Quantity)
+		// Update item quantity in cart
+		public static void UpdateQuantity(string productId, int quantity, string userId)
 		{
+			if (quantity <= 0) { RemoveItem(productId, userId); return; }
+
 			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
 			{
 				conn.Open();
-				string updateSql = @"UPDATE Cart SET Quantity = @quantity 
-                             WHERE ProductID = @productid";
+				string updateSql = @"UPDATE Cart SET Quantity = @Quantity 
+                             WHERE ProductID = @ProductId AND CustomerID = @CustomerId";
 
 				SqlCommand cmd = new SqlCommand(updateSql, conn);
-				cmd.Parameters.AddWithValue("@productid", Id);
-				cmd.Parameters.AddWithValue("@quantity", Quantity);
+				cmd.Parameters.AddWithValue("@Quantity", quantity);
+				cmd.Parameters.AddWithValue("@ProductId", productId);
+				cmd.Parameters.AddWithValue("@CustomerId", userId);
 				cmd.ExecuteNonQuery();
 			}
 		}
 
-		//Delete a item
-		public static void DeleteCart(string customer,string productId)
+		// Remove item from cart
+		public static void RemoveItem(string productId, string userId)
 		{
 			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
 			{
 				conn.Open();
-				string deleteSql = @"DELETE From Cart
-                             WHERE ProductID = @productid and CustomerID=@customer";
+				string deleteSql = @"DELETE FROM Cart
+                             WHERE ProductID = @ProductId AND CustomerID=@CustomerId";
 
 				SqlCommand cmd = new SqlCommand(deleteSql, conn);
-				cmd.Parameters.AddWithValue("@productid", productId);
-				cmd.Parameters.AddWithValue("@customer", customer);
+				cmd.Parameters.AddWithValue("@ProductId", productId);
+				cmd.Parameters.AddWithValue("@CustomerId", userId);
 				cmd.ExecuteNonQuery();
-
 			}
-
 		}
 	}
 }

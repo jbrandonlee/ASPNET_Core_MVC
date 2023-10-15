@@ -4,8 +4,11 @@
 	var products = ViewBag.products;
 }
 
+@section Scripts {
+	<script src="/js/gallery.js" defer></script>
+}
+
 <div id="body-gallery">
-	<script src="~/js/site.js"></script>
 	<h1 class="display-4">Gallery/Index</h1><br />
 	<form id="formSearch">
 		<div class="input-group">
@@ -19,8 +22,6 @@
 	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
 		@foreach (Product p in products)
 		{
-			string displayPrice = String.Format($"{p.Price:C2}");
-
 			<div class="col">
 				<div class="card">
 					<img src="@p.ImageUrl" class="card-img-top">
@@ -29,11 +30,15 @@
 						<p class="card-text desc-height-3">@p.Description</p>
 					</div>
 					<div class="card-footer">
-						<button type="button" class="btn btn-primary" onclick="addtocart('@p.Id')">@displayPrice - Add to Cart</button>
+						<button type="button" class="btn btn-primary btn-addCart" data-product-id="@p.Id">@p.Price - Add to Cart</button>
 					</div>
 				</div>
 			</div>
 		}
 	</div>
 </div>
+
+<script defer>
+
+</script>
 

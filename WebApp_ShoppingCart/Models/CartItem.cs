@@ -4,8 +4,10 @@
 	{
 		public string? CustomerId { get; set; }
 		public int Quantity { get; set; }
+		public DateOnly Date { get; set; }
 
-		public static CartItem ConvertToCartItem(Product product, string CustomerId, int Quantity)
+		// Used in ShopController for AddToCart()
+		public static CartItem ConvertToCartItem(Product product, string customerId)
 		{
 			CartItem cartItem = new CartItem
 			{
@@ -14,10 +16,10 @@
 				Description = product.Description,
 				Price = product.Price,
 				ImageUrl = product.ImageUrl,
-				CustomerId = CustomerId,
-				Quantity = Quantity
+				CustomerId = customerId,
+				Quantity = 1,
+				Date = DateOnly.FromDateTime(DateTime.Today)
 			};
-
 			return cartItem;
 		}
 	}

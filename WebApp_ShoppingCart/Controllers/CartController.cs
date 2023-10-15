@@ -10,24 +10,50 @@ namespace WebApp_ShoppingCart.Controllers
 	{
 		public IActionResult Index()
 		{
-			ViewBag.Cart = DBCart.GetCartItems("john");
-			return View();
+			string isRegistered = HttpContext.Session.GetString("isRegistered");
+			string userId = HttpContext.Session.GetString("userId");
+			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+
+			if (String.IsNullOrEmpty(isRegistered))                                     // If not logged in
+			{                                                                           // Save sessionId as userId
+				ISession sessionObj = HttpContext.Session;
+				sessionObj.SetString("userId", sessionObj.Id);
+				Console.WriteLine("Set userId in Cart:\n" + sessionObj.Id);
+                ViewBag.username = "User";
+			}
+			else                                                                        // Else already logged in
+			{                                                                           // Update nav
+                ViewBag.username = HttpContext.Session.GetString("userId");
+			}
+
+			ViewBag.Cart = DBCart.GetCartItems(userId);
+            ViewBag.cartCount = DBCart.GetUniqueCount(userId);
+            return View();
 		}
 		
 		[HttpPost]
-		public IActionResult ChangeItem(string Id,int quantity)
+		public IActionResult UpdateCartItem(string productId, int quantity)
 		{
-			DBCart.ChangeCart(Id,quantity);
-			return RedirectToAction("Index");
+			string isRegistered = HttpContext.Session.GetString("isRegistered");
+			string userId = HttpContext.Session.GetString("userId");
+			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+
+			DBCart.UpdateQuantity(productId, quantity, userId);
+			return RedirectToAction("Index", "Cart");
 		}
 
 		[HttpPost]
-		public IActionResult DeleteItem(string customer,string Id)
+		public IActionResult RemoveCartItem(string productId)
 		{
-			Debug.WriteLine($"this is the id:{Id},{customer}");
-			DBCart.DeleteCart(customer,Id);
-			return RedirectToAction("Index");
-		}
+			string isRegistered = HttpContext.Session.GetString("isRegistered");
+			string userId = HttpContext.Session.GetString("userId");
+			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+
+			DBCart.RemoveItem(productId, userId);
+            ViewBag.cartCount = DBCart.GetUniqueCount(userId);
+            return Json(new { cartCount = ViewBag.cartCount });
+        }
+
 		public IActionResult Checkout()
 		{
 			return RedirectToAction("History", "Account");
