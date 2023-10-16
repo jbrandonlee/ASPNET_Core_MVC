@@ -18,7 +18,7 @@ namespace WebApp_ShoppingCart.Controllers
 		{
 			string? isAuthenticated = HttpContext.Session.GetString("isAuthenticated");
 
-			if (String.IsNullOrEmpty(isAuthenticated))                                  // If not logged in
+			if (String.IsNullOrEmpty(isAuthenticated) || isAuthenticated != "true")     // If not logged in
 			{                                                                           // Display common view
 				ViewBag.debugInfo = $"isAuthenticated = false, userId = none";
 				return View();
@@ -33,6 +33,8 @@ namespace WebApp_ShoppingCart.Controllers
 		public IActionResult Login(string username, string passhash)
 		{
 			Dictionary<string, string> users = DBUser.GetUserDict();
+			ISession sessionObj = HttpContext.Session;
+			string? fromCheckout = sessionObj.GetString("fromCheckout");
 
 			if (String.IsNullOrEmpty(username) && String.IsNullOrEmpty(passhash))		// Invalid values
 			{
@@ -42,10 +44,19 @@ namespace WebApp_ShoppingCart.Controllers
 			else if (users.ContainsKey(username.ToLower()))								// Login was attempted
 			{
 				if (users[username.ToLower()] == passhash)								// Login success
-				{
-					HttpContext.Session.SetString("isAuthenticated", "true");			// Update session details
-					HttpContext.Session.SetString("userId", username);
-					return RedirectToAction("Gallery", "Shop");
+				{																		// Update session details
+					sessionObj.SetString("isAuthenticated", "true");
+					sessionObj.SetString("userId", username);
+
+					if (String.IsNullOrEmpty(fromCheckout) || fromCheckout != "true")	// If not logging in after Checkout button
+					{                                                                   // Redirect to Gallery
+						return RedirectToAction("Gallery", "Shop");
+					}
+					else																// User came directly from Checkout
+					{                                                                   // Reassign cart items to new user, Checkout again
+						DBCart.UpdateCartUser(sessionObj.Id, username);
+						return RedirectToAction("Checkout", "Cart");
+					}
 				}
 			}
 
@@ -66,8 +77,9 @@ namespace WebApp_ShoppingCart.Controllers
 			ISession sessionObj = HttpContext.Session;
 			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
 			string? userId = sessionObj.GetString("userId");
+			sessionObj.SetString("fromCheckout", "false");
 
-			if (String.IsNullOrEmpty(isAuthenticated))                                  // If not logged in
+			if (String.IsNullOrEmpty(isAuthenticated) || isAuthenticated != "true")     // If not logged in
 			{                                                                           // Redirect to Login page
 				return RedirectToAction("Login", "Account");
 			}

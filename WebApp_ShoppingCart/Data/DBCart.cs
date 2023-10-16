@@ -151,5 +151,21 @@ namespace WebApp_ShoppingCart.Data
 				cmd.ExecuteNonQuery();
 			}
 		}
+
+		// Transfers all items from sessionId's cart to userId
+		public static void UpdateCartUser(string sessionId, string userId)
+		{
+			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			{
+				conn.Open();
+				string sql = @"UPDATE Cart SET CustomerID = @UserId 
+                               WHERE CustomerID = @SessionId";
+
+				SqlCommand cmd = new SqlCommand(sql, conn);
+				cmd.Parameters.AddWithValue("@UserId", userId);
+				cmd.Parameters.AddWithValue("@SessionId", sessionId);
+				cmd.ExecuteNonQuery();
+			}
+		}
 	}
 }

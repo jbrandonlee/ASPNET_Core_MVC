@@ -13,8 +13,9 @@ namespace WebApp_ShoppingCart.Controllers
 			ISession sessionObj = HttpContext.Session;
 			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
 			string? userId = sessionObj.GetString("userId");
+			sessionObj.SetString("fromCheckout", "false");
 
-			if (String.IsNullOrEmpty(isAuthenticated))                                          // If not logged in
+			if (String.IsNullOrEmpty(isAuthenticated) || isAuthenticated != "true")				// If not logged in
 			{                                                                                   // Save sessionId as userId
 				sessionObj.SetString("userId", sessionObj.Id);
 				ViewBag.debugInfo = $"isAuthenticated = false, userId = {sessionObj.Id}";
@@ -56,15 +57,19 @@ namespace WebApp_ShoppingCart.Controllers
 		public IActionResult Checkout()
 		{
 			ISession sessionObj = HttpContext.Session;
+			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
 			string? userId = sessionObj.GetString("userId");
 
-			// If User is isAuthenticated
-			DBPurchase.CheckoutCart(DBCart.GetCartItems(userId), userId);
-			return RedirectToAction("History", "Account");
-
-			// Else
-			// sessionObj.SetString("isCheckout", "true");
-			// Redirect to Login
+			if (String.IsNullOrEmpty(isAuthenticated) || isAuthenticated != "true")             // If not logged in
+			{                                                                                   // Redirect User to Login
+				sessionObj.SetString("fromCheckout", "true");
+				return RedirectToAction("Login", "Account");
+			}
+			else                                                                                // Else already logged in
+			{																					// Checkout items in Cart
+				DBPurchase.CheckoutCart(DBCart.GetCartItems(userId), userId);
+				return RedirectToAction("History", "Account");
+			}
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

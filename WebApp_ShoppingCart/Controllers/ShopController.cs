@@ -13,8 +13,9 @@ namespace WebApp_ShoppingCart.Controllers
 			ISession sessionObj = HttpContext.Session;
 			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
 			string? userId = sessionObj.GetString("userId");
+			sessionObj.SetString("fromCheckout", "false");
 
-			if (String.IsNullOrEmpty(isAuthenticated))                                          // If not logged in
+			if (String.IsNullOrEmpty(isAuthenticated) || isAuthenticated != "true")             // If not logged in
 			{                                                                                   // Save sessionId as userId
 				sessionObj.SetString("userId", sessionObj.Id);
 				ViewBag.debugInfo = $"isAuthenticated = false, userId = {sessionObj.Id}";
