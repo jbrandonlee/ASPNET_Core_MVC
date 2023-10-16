@@ -44,6 +44,7 @@ span.badge {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;
+    min-height: 4.5rem;
     -webkit-box-orient: vertical;
 }
 
@@ -105,7 +106,7 @@ span.badge {
 
 #body-cart .product-details, #body-history .product-details {
     width: 100%;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 #body-cart .product-details > .row, #body-history .product-details > .row {
