@@ -95,8 +95,7 @@ namespace WebApp_ShoppingCart.Data
 				{
 					// If Item does not exist in Cart, add to cart
 					string sql = @"INSERT INTO Cart(ProductID, Quantity, CustomerID, Date) 
-								   VALUES(@productid,@productquantity,@customerid, @date);
-								   SELECT SCOPE_IDENTITY();";
+								   VALUES(@productid,@productquantity,@customerid, @date);";
 					SqlCommand cmd = new SqlCommand(sql, conn);
 
 					cmd.Parameters.AddWithValue("@productid", cartItem.Id);

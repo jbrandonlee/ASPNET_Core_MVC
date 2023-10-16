@@ -55,8 +55,16 @@ namespace WebApp_ShoppingCart.Controllers
 
 		public IActionResult Checkout()
 		{
-			HttpContext.Session.SetString("isCheckout", "true");
+			ISession sessionObj = HttpContext.Session;
+			string? userId = sessionObj.GetString("userId");
+
+			// If User is isAuthenticated
+			DBPurchase.CheckoutCart(DBCart.GetCartItems(userId), userId);
 			return RedirectToAction("History", "Account");
+
+			// Else
+			// sessionObj.SetString("isCheckout", "true");
+			// Redirect to Login
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -16,7 +16,7 @@ namespace WebApp_ShoppingCart.Data
 				string sql = @"SELECT P.ProductID, P.ProductName, P.Description, O.OrderId, O.PurchaseDate, OD.ActivationCode 
                                FROM ProductList P, OrderHeader O, OrderDetails OD
                                WHERE P.ProductID = OD.ProductID AND O.OrderID = OD.OrderID AND O.CustomerID = @Username 
-							   ORDER BY PurchaseDate, ProductID";
+							   ORDER BY OrderId DESC, ProductID";
 				SqlCommand cmd = new SqlCommand(sql, conn);
 				cmd.Parameters.AddWithValue("@Username", username);
 				SqlDataReader reader = cmd.ExecuteReader();
@@ -29,7 +29,7 @@ namespace WebApp_ShoppingCart.Data
 						Name = (string)reader["ProductName"],
 						Description = (string)reader["Description"],
 						ImageUrl = $"/img/{(string)reader["ProductID"]}.png",
-						OrderId = (string)reader["OrderId"],
+						OrderId = (int)reader["OrderId"],
 						ActivationCode = new List<string>(),
 						Date = DateOnly.FromDateTime((DateTime)reader["PurchaseDate"])
 					};
@@ -50,6 +50,62 @@ namespace WebApp_ShoppingCart.Data
 				}
 			}
 			return purchases;
+		}
+
+		// For Checkout Action Method
+		public static void CheckoutCart(List<CartItem> cartItems, string username)
+		{
+			if (cartItems == null || cartItems.Count() == 0) { return; }
+
+			int orderId = CreateOrderHeader(username);
+
+			foreach (CartItem item in cartItems)
+			{
+				for (int i = 0; i < item.Quantity; i++)
+				{
+					Purchase purchaseItem = Purchase.ConvertToPurchaseItem(item, orderId);
+					CreateOrderDetail(purchaseItem);
+				}
+				DBCart.RemoveItem(item.Id, username);
+			}
+		}
+
+		// Helper function for CheckoutCart
+		// Creates OrderHeader and returns OrderId created
+		public static int CreateOrderHeader(string username)
+		{
+			Console.WriteLine("Create Order Header for:" + username);
+			int orderId;
+			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			{
+				conn.Open();
+				string sql = @"INSERT INTO OrderHeader (CustomerID, PurchaseDate) 
+							   VALUES (@CustomerId, @PurchaseDate);
+							   SELECT SCOPE_IDENTITY();";
+				SqlCommand cmd = new SqlCommand(sql, conn);
+
+				cmd.Parameters.AddWithValue("@CustomerId", username);
+				cmd.Parameters.AddWithValue("@PurchaseDate", DateOnly.FromDateTime(DateTime.Today));
+				orderId = Convert.ToInt32(cmd.ExecuteScalar());
+			}
+			return orderId;
+		}
+
+		// Helper function for CheckoutCart
+		public static void CreateOrderDetail(Purchase purchaseItem)
+		{
+			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			{
+				conn.Open();
+				string sql = @"INSERT INTO OrderDetails (OrderID, ProductID, ActivationCode) 
+							   VALUES (@OrderId, @ProductId, @ActivationCode);";
+				SqlCommand cmd = new SqlCommand(sql, conn);
+
+				cmd.Parameters.AddWithValue("@OrderId", purchaseItem.OrderId);
+				cmd.Parameters.AddWithValue("@ProductId", purchaseItem.Id);
+				cmd.Parameters.AddWithValue("@ActivationCode", purchaseItem.ActivationCode[0]);
+				cmd.ExecuteNonQuery();
+			}
 		}
 	}
 }

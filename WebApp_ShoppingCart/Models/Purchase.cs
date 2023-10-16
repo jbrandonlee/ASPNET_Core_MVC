@@ -3,7 +3,7 @@
 	public class Purchase : Product
 	{
 		public string? CustomerId { get; set; }
-		public string? OrderId { get; set; }
+		public int? OrderId { get; set; }
 		public List<string>? ActivationCode { get; set; }
 		public DateOnly? Date { get; set; }
 
@@ -16,6 +16,23 @@
 				return true;
 			}
 			return false;
+		}
+
+		public static Purchase ConvertToPurchaseItem(CartItem cartItem, int orderId)
+		{
+			Purchase purchaseItem = new Purchase
+			{
+				Id = cartItem.Id,
+				Name = cartItem.Name,
+				Description = cartItem.Description,
+				Price = cartItem.Price,
+				ImageUrl = cartItem.ImageUrl,
+				CustomerId = cartItem.CustomerId,
+				OrderId = orderId,
+				ActivationCode = new List<string>() { Guid.NewGuid().ToString() },
+				Date = DateOnly.FromDateTime(DateTime.Today)
+			};
+			return purchaseItem;
 		}
 	}
 }
