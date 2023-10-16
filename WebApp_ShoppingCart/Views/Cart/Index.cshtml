@@ -1,11 +1,15 @@
 ﻿@{
 	ViewData["Title"] = "My Cart";
 	var currUser = (String.IsNullOrEmpty(ViewBag.username)) ? "User" : ViewBag.username;
-	var cart = ViewBag.Cart;
+	var cart = ViewBag.cart;
 }
 
 @section Scripts {
 	<script src="/js/cart.js" defer></script>
+}
+
+@section DebugInfo {
+	<span class="ms-4 text-danger" style="position: absolute; right:0px">@ViewBag.debugInfo</span>
 }
 
 @section NavLeft {

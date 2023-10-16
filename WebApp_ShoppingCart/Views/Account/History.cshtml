@@ -8,6 +8,10 @@
 	<script src="/js/gallery.js" defer></script>
 }
 
+@section DebugInfo {
+	<span class="ms-4 text-danger" style="position: absolute; right:0px">@ViewBag.debugInfo</span>
+}
+
 @section NavLeft {
 	<a class="navbar-brand pe-2">Hello, <span>@currUser</span></a>
 	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"

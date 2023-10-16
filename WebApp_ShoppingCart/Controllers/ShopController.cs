@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApp_ShoppingCart.Data;
 using WebApp_ShoppingCart.Models;
@@ -11,40 +10,36 @@ namespace WebApp_ShoppingCart.Controllers
     {
         public IActionResult Gallery(string search)
         {
-			string? isRegistered = HttpContext.Session.GetString("isRegistered");
-			string? userId = HttpContext.Session.GetString("userId");
-			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+			ISession sessionObj = HttpContext.Session;
+			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
+			string? userId = sessionObj.GetString("userId");
 
-			if (String.IsNullOrEmpty(isRegistered))                                             // If not logged in
+			if (String.IsNullOrEmpty(isAuthenticated))                                          // If not logged in
 			{                                                                                   // Save sessionId as userId
-				ISession sessionObj = HttpContext.Session;
 				sessionObj.SetString("userId", sessionObj.Id);
-				Console.WriteLine("Set userId in Gallery:\n" + sessionObj.Id);
-				ViewBag.username = "User";
+				ViewBag.debugInfo = $"isAuthenticated = false, userId = {sessionObj.Id}";
 			}
 			else                                                                                // Else already logged in
 			{                                                                                   // Update nav
-                ViewBag.username = HttpContext.Session.GetString("userId");
+				ViewBag.username = userId;
+				ViewBag.debugInfo = $"isAuthenticated = true, userId = {userId}";
 			}
 
 			List<Product> products;
             products = String.IsNullOrEmpty(search) ? DBProduct.GetProducts() : DBProduct.GetFilteredProducts(search);
 			ViewBag.products = products;
-			ViewBag.cartCount = DBCart.GetUniqueCount(userId);
+			ViewBag.cartCount = DBCart.GetUniqueCount(sessionObj.GetString("userId"));
 			return View();
         }
 
 		[HttpPost]
 		public IActionResult AddToCart(string productId)
 		{
-			ISession sessionObj = HttpContext.Session;
-			string isRegistered = sessionObj.GetString("isRegistered");
-			string userId = sessionObj.GetString("userId");
-			Console.WriteLine($"Added to Cart BY\nuserId:\n{userId}\nisRegistered:\n{isRegistered}");
+			string? userId = HttpContext.Session.GetString("userId");
 
 			if (DBProduct.IsValidId(productId))
 			{
-				Product product = DBProduct.GetProductById(productId);
+				Product? product = DBProduct.GetProductById(productId);
 				CartItem cartItem = CartItem.ConvertToCartItem(product, userId);
 				DBCart.AddToCart(cartItem);
 			}

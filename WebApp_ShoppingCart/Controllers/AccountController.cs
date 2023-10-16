@@ -16,12 +16,11 @@ namespace WebApp_ShoppingCart.Controllers
 		[HttpGet]
 		public IActionResult Login()
 		{
-			string? isRegistered = HttpContext.Session.GetString("isRegistered");
-			string? userId = HttpContext.Session.GetString("userId");
-			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+			string? isAuthenticated = HttpContext.Session.GetString("isAuthenticated");
 
-			if (String.IsNullOrEmpty(isRegistered))                                     // If not logged in
-			{																			// Display common view
+			if (String.IsNullOrEmpty(isAuthenticated))                                  // If not logged in
+			{                                                                           // Display common view
+				ViewBag.debugInfo = $"isAuthenticated = false, userId = none";
 				return View();
 			}
 			else                                                                        // Else already logged in
@@ -37,13 +36,14 @@ namespace WebApp_ShoppingCart.Controllers
 
 			if (String.IsNullOrEmpty(username) && String.IsNullOrEmpty(passhash))		// Invalid values
 			{
+				ViewBag.debugInfo = $"isAuthenticated = false, userId = none";
 				return View();
 			}
 			else if (users.ContainsKey(username.ToLower()))								// Login was attempted
 			{
 				if (users[username.ToLower()] == passhash)								// Login success
 				{
-					HttpContext.Session.SetString("isRegistered", "true");				// Update session details
+					HttpContext.Session.SetString("isAuthenticated", "true");			// Update session details
 					HttpContext.Session.SetString("userId", username);
 					return RedirectToAction("Gallery", "Shop");
 				}
@@ -51,6 +51,7 @@ namespace WebApp_ShoppingCart.Controllers
 
 			// Login attempt fails
 			ViewBag.loginError = "The username or password entered is incorrect. Please try again.";
+			ViewBag.debugInfo = $"isAuthenticated = false, userId = none";
 			return View();
 		}
 
@@ -62,11 +63,11 @@ namespace WebApp_ShoppingCart.Controllers
 
 		public IActionResult History()
 		{
-			string? isRegistered = HttpContext.Session.GetString("isRegistered");
-			string? userId = HttpContext.Session.GetString("userId");
-			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+			ISession sessionObj = HttpContext.Session;
+			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
+			string? userId = sessionObj.GetString("userId");
 
-			if (String.IsNullOrEmpty(isRegistered))                                     // If not logged in
+			if (String.IsNullOrEmpty(isAuthenticated))                                  // If not logged in
 			{                                                                           // Redirect to Login page
 				return RedirectToAction("Login", "Account");
 			}
@@ -75,7 +76,8 @@ namespace WebApp_ShoppingCart.Controllers
 				List<Purchase> purchases = DBPurchase.GetPurchaseHistory(userId);
 				ViewBag.purchases = purchases;
                 ViewBag.cartCount = DBCart.GetUniqueCount(userId);
-				ViewBag.username = HttpContext.Session.GetString("userId");
+				ViewBag.username = userId;
+				ViewBag.debugInfo = $"isAuthenticated = true, userId = {userId}";
 				return View();
 			}
 		}

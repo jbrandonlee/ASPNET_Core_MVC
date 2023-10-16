@@ -4,7 +4,6 @@
 	var products = ViewBag.products;
 
 	string cartCount;
-	Console.WriteLine("Count is" + ViewBag.cartCount);
 	if (ViewBag.cartCount == null) { cartCount = "0"; }
 	else if (ViewBag.cartCount < 100) { cartCount = ViewBag.cartCount?.ToString(); }
 	else { cartCount = "99+"; }
@@ -12,6 +11,10 @@
 
 @section Scripts {
 	<script src="/js/gallery.js" defer></script>
+}
+
+@section DebugInfo {
+	<span class="ms-4 text-danger" style="position: absolute; right:0px">@ViewBag.debugInfo</span>
 }
 
 @section NavLeft {

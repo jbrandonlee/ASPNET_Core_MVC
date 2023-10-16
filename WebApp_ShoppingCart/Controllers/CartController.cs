@@ -10,23 +10,22 @@ namespace WebApp_ShoppingCart.Controllers
 	{
 		public IActionResult Index()
 		{
-			string? isRegistered = HttpContext.Session.GetString("isRegistered");
-			string? userId = HttpContext.Session.GetString("userId");
-			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+			ISession sessionObj = HttpContext.Session;
+			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
+			string? userId = sessionObj.GetString("userId");
 
-			if (String.IsNullOrEmpty(isRegistered))                                     // If not logged in
-			{                                                                           // Save sessionId as userId
-				ISession sessionObj = HttpContext.Session;
+			if (String.IsNullOrEmpty(isAuthenticated))                                          // If not logged in
+			{                                                                                   // Save sessionId as userId
 				sessionObj.SetString("userId", sessionObj.Id);
-				Console.WriteLine("Set userId in Cart:\n" + sessionObj.Id);
-                ViewBag.username = "User";
+				ViewBag.debugInfo = $"isAuthenticated = false, userId = {sessionObj.Id}";
 			}
-			else                                                                        // Else already logged in
-			{                                                                           // Update nav
-                ViewBag.username = HttpContext.Session.GetString("userId");
+			else                                                                                // Else already logged in
+			{                                                                                   // Update nav
+				ViewBag.username = userId;
+				ViewBag.debugInfo = $"isAuthenticated = true, userId = {userId}";
 			}
 
-			ViewBag.Cart = DBCart.GetCartItems(userId);
+			ViewBag.cart = DBCart.GetCartItems(userId);
             ViewBag.cartCount = DBCart.GetUniqueCount(userId);
             return View();
 		}
@@ -34,9 +33,9 @@ namespace WebApp_ShoppingCart.Controllers
 		[HttpPost]
 		public IActionResult UpdateCartItem(string productId, int quantity)
 		{
-			string? isRegistered = HttpContext.Session.GetString("isRegistered");
-			string? userId = HttpContext.Session.GetString("userId");
-			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+			ISession sessionObj = HttpContext.Session;
+			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
+			string? userId = sessionObj.GetString("userId");
 
 			DBCart.UpdateQuantity(productId, quantity, userId);
 			return RedirectToAction("Index", "Cart");
@@ -45,9 +44,9 @@ namespace WebApp_ShoppingCart.Controllers
 		[HttpPost]
 		public IActionResult RemoveCartItem(string productId)
 		{
-			string? isRegistered = HttpContext.Session.GetString("isRegistered");
-			string? userId = HttpContext.Session.GetString("userId");
-			Console.WriteLine($"userId:\n{userId}\nisRegistered:\n{isRegistered}");
+			ISession sessionObj = HttpContext.Session;
+			string? isAuthenticated = sessionObj.GetString("isAuthenticated");
+			string? userId = sessionObj.GetString("userId");
 
 			DBCart.RemoveItem(productId, userId);
             ViewBag.cartCount = DBCart.GetUniqueCount(userId);
@@ -56,6 +55,7 @@ namespace WebApp_ShoppingCart.Controllers
 
 		public IActionResult Checkout()
 		{
+			HttpContext.Session.SetString("isCheckout", "true");
 			return RedirectToAction("History", "Account");
 		}
 
