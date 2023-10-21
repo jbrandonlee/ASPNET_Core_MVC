@@ -87,7 +87,7 @@ namespace WebApp_ShoppingCart.Controllers
 			{                                                                           // Display user-specific view
 				List<Purchase> purchases = DBPurchase.GetPurchaseHistory(userId);
 				ViewBag.purchases = purchases;
-				ViewBag.username = userId;
+				ViewBag.displayname = DBUser.GetDisplayName(userId);
 				ViewBag.debugInfo = $"isAuthenticated = true, userId = {userId}";
 				return View();
 			}

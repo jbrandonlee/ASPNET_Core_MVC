@@ -22,7 +22,7 @@ namespace WebApp_ShoppingCart.Controllers
 			}
 			else                                                                                // Else already logged in
 			{                                                                                   // Update nav
-				ViewBag.username = userId;
+				ViewBag.displayname = DBUser.GetDisplayName(userId);
 				ViewBag.debugInfo = $"isAuthenticated = true, userId = {userId}";
 			}
 

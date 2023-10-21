@@ -15,8 +15,8 @@ namespace WebApp_ShoppingCart.Data
 				conn.Open();
 				string sql = @"SELECT * FROM [User]";
 				SqlCommand cmd = new SqlCommand(sql, conn);
+				
 				SqlDataReader reader = cmd.ExecuteReader();
-
 				while (reader.Read())
 				{
 					string username = (string)reader["Username"];
@@ -24,8 +24,24 @@ namespace WebApp_ShoppingCart.Data
 					users.Add(username, passhash);
 				}
 			}
-
 			return users;
+		}
+
+		// Returns DisplayName given Username
+		public static string? GetDisplayName(string username)
+		{
+			string displayname = null;
+
+			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			{
+				conn.Open();
+				string sql = @"SELECT Displayname FROM [User] WHERE Username=@Username";
+				SqlCommand cmd = new SqlCommand(sql, conn);
+				cmd.Parameters.AddWithValue("@Username", username);
+
+				displayname = (string) cmd.ExecuteScalar();
+			}
+			return displayname;
 		}
 	}
 }
