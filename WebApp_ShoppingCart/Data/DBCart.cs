@@ -88,23 +88,23 @@ namespace WebApp_ShoppingCart.Data
 				{
 					// If Item does not exist in Cart, add to cart
 					string sql = @"INSERT INTO Cart(ProductID, Quantity, CustomerID, Date) 
-								   VALUES(@productid,@productquantity,@customerid, @date);";
+								   VALUES(@ProductId, @ProductQuantity, @CustomerId, @Date);";
 					SqlCommand cmd = new SqlCommand(sql, conn);
 
-					cmd.Parameters.AddWithValue("@productid", cartItem.Id);
-					cmd.Parameters.AddWithValue("@productquantity", cartItem.Quantity);
-					cmd.Parameters.AddWithValue("@customerid", cartItem.CustomerId);
-					cmd.Parameters.AddWithValue("@date", cartItem.Date);
+					cmd.Parameters.AddWithValue("@ProductId", cartItem.Id);
+					cmd.Parameters.AddWithValue("@ProductQuantity", cartItem.Quantity);
+					cmd.Parameters.AddWithValue("@CustomerId", cartItem.CustomerId);
+					cmd.Parameters.AddWithValue("@Date", cartItem.Date);
 					cmd.ExecuteNonQuery();
 				}
 				else
 				{
 					// If Item already exists in Cart, update quantity
 					string updateSql = @"UPDATE Cart SET Quantity = Quantity + 1 
-                             WHERE ProductID = @productid";
+                             WHERE ProductID = @ProductId";
 
 					SqlCommand cmd2 = new SqlCommand(updateSql, conn);
-					cmd2.Parameters.AddWithValue("@productid", cartItem.Id);
+					cmd2.Parameters.AddWithValue("@ProductId", cartItem.Id);
 					cmd2.ExecuteNonQuery();
 				}
 			}

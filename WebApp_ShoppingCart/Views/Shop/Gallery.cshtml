@@ -2,6 +2,8 @@
 	ViewData["Title"] = "Gallery";
 	var currUser = (String.IsNullOrEmpty(ViewBag.displayname)) ? "User" : ViewBag.displayname;
 	var products = ViewBag.products;
+	var filter = ViewBag.filter;
+	var search = ViewBag.search;
 
 	string cartCount;
 	if (ViewBag.cartCount == null) { cartCount = "0"; }
@@ -71,30 +73,25 @@
 			<span class="input-group-text" id="buttonSearch" onclick="document.getElementById('formSearch').submit();">
 				<i class="bi bi-search"></i>
 			</span>
-			<input type="text" class="form-control" id="searchbar" name="search" placeholder="Enter your search here...">
+			<input type="text" class="form-control" id="searchbar" name="search" placeholder="Enter your search here..." value=@search>
 		</div>
 	</form>
 
 	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-		@foreach (Product p in products)
+		@for(int i = 0; i < products.Count; i++)
 		{
-			<div class="col">
+			<div class="col @((filter[i]) ? "" : "hide-product")">
 				<div class="card">
-					<img src="@p.ImageUrl" class="card-img-top">
+					<img src="@products[i].ImageUrl" class="card-img-top">
 					<div class="card-body">
-						<h5 class="card-title">@p.Name</h5>
-						<p class="card-text desc-height-3">@p.Description</p>
+						<h5 class="card-title">@products[i].Name</h5>
+						<p class="card-text desc-height-3">@products[i].Description</p>
 					</div>
 					<div class="card-footer">
-						<button type="button" class="btn btn-primary btn-addCart" data-product-id="@p.Id">$@p.Price - Add to Cart</button>
+						<button type="button" class="btn btn-primary btn-addCart" data-product-id="@products[i].Id">$@products[i].Price - Add to Cart</button>
 					</div>
 				</div>
 			</div>
 		}
 	</div>
 </div>
-
-<script defer>
-
-</script>
-

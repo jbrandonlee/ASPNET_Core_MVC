@@ -33,6 +33,26 @@ namespace WebApp_ShoppingCart.Data
 			}
 			return products;
 		}
+		
+		public static List<bool>? GetProductsFilter(string search)
+		{
+			List<Product> products = GetProducts();
+			List<bool> filter = new List<bool>();
+			if (!String.IsNullOrEmpty(search)) { search = search.ToLower(); }
+
+			foreach(Product product in products)
+			{
+				if (String.IsNullOrEmpty(search) || product.Name.ToLower().Contains(search) || product.Description.ToLower().Contains(search))
+				{
+					filter.Add(true);	// Show
+				} else
+				{
+					filter.Add(false);	// Hide
+				}
+			}
+			return filter;
+		}
+
 
 		// Returned filtered list of products in DB by search term
 		public static List<Product> GetFilteredProducts(string search)

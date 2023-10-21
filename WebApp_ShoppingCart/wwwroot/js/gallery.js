@@ -9,6 +9,20 @@ function UpdateCartCount(num) {
 	}
 }
 
+// Handles Empty Searchbar
+let searchbar = document.getElementById("searchbar");
+
+searchbar.addEventListener("input", function (e) {
+	// If searchbar empty, show all items
+	if (searchbar.value == "") {
+		let list = document.querySelectorAll(".hide-product");
+		list.forEach(elem => {
+			elem.classList.remove("hide-product");
+		})
+	}
+})
+
+
 // Add 'Click' EventListeners to all AddToCart buttons
 let addBtns = document.getElementsByClassName("btn-addCart");
 

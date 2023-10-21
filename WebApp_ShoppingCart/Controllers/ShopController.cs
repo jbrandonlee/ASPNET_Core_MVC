@@ -26,9 +26,11 @@ namespace WebApp_ShoppingCart.Controllers
 				ViewBag.debugInfo = $"isAuthenticated = true, userId = {userId}";
 			}
 
-			List<Product> products;
-            products = String.IsNullOrEmpty(search) ? DBProduct.GetProducts() : DBProduct.GetFilteredProducts(search);
+			List<Product> products = DBProduct.GetProducts();
+			List<bool>? filter = DBProduct.GetProductsFilter(search);
+			ViewBag.search = search;
 			ViewBag.products = products;
+			ViewBag.filter = filter;
 			ViewBag.cartCount = DBCart.GetNonUniqueCount(sessionObj.GetString("userId"));
 			return View();
         }

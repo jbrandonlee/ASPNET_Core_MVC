@@ -87,6 +87,10 @@ span.badge {
     width: 90%;
 }
 
+#body-gallery .hide-product {
+    display: none;
+}
+
 /* Cart/Index Page Styles */
 #body-cart .product-row, #body-history .product-row {
     padding: 1em 0;
