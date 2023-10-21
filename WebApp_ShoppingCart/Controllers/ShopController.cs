@@ -29,7 +29,7 @@ namespace WebApp_ShoppingCart.Controllers
 			List<Product> products;
             products = String.IsNullOrEmpty(search) ? DBProduct.GetProducts() : DBProduct.GetFilteredProducts(search);
 			ViewBag.products = products;
-			ViewBag.cartCount = DBCart.GetUniqueCount(sessionObj.GetString("userId"));
+			ViewBag.cartCount = DBCart.GetNonUniqueCount(sessionObj.GetString("userId"));
 			return View();
         }
 
@@ -45,7 +45,7 @@ namespace WebApp_ShoppingCart.Controllers
 				DBCart.AddToCart(cartItem);
 			}
 
-            ViewBag.cartCount = DBCart.GetUniqueCount(userId);
+            ViewBag.cartCount = DBCart.GetNonUniqueCount(userId);
             return Json(new { cartCount = ViewBag.cartCount });
 		}
 

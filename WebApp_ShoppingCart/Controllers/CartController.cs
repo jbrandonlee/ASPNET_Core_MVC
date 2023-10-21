@@ -27,7 +27,6 @@ namespace WebApp_ShoppingCart.Controllers
 			}
 
 			ViewBag.cart = DBCart.GetCartItems(userId);
-            ViewBag.cartCount = DBCart.GetUniqueCount(userId);
             return View();
 		}
 		
@@ -39,7 +38,7 @@ namespace WebApp_ShoppingCart.Controllers
 			string? userId = sessionObj.GetString("userId");
 
 			DBCart.UpdateQuantity(productId, quantity, userId);
-			return RedirectToAction("Index", "Cart");
+			return Ok();
 		}
 
 		[HttpPost]
@@ -50,8 +49,7 @@ namespace WebApp_ShoppingCart.Controllers
 			string? userId = sessionObj.GetString("userId");
 
 			DBCart.RemoveItem(productId, userId);
-            ViewBag.cartCount = DBCart.GetUniqueCount(userId);
-            return Json(new { cartCount = ViewBag.cartCount });
+            return Ok();
         }
 
 		public IActionResult Checkout()

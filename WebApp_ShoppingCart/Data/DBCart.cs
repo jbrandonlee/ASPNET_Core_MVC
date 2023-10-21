@@ -41,24 +41,17 @@ namespace WebApp_ShoppingCart.Data
 			}
 		}
 
-		// (For View) Returns number of unique items in cart
-		public static int GetUniqueCount(string username)
+		// (For view) Returns quantity of items in cart
+		public static int GetNonUniqueCount(string username)
 		{
 			if (String.IsNullOrEmpty(username)) { return 0; }
+			List<CartItem> cartItems = GetCartItems(username);
+			
+			int count = 0;
 
-			List<CartItem> cartItems = new List<CartItem>();
-			int count;
-
-			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
+			foreach (CartItem cartItem in cartItems)
 			{
-				conn.Open();
-				string sql = @"SELECT COUNT(*) FROM Cart
-							   WHERE CustomerID = @CustomerId";
-
-				SqlCommand cmd = new SqlCommand(sql, conn);
-				cmd.Parameters.AddWithValue("@CustomerId", username);
-				
-				count = (int)cmd.ExecuteScalar();
+				count += cartItem.Quantity;
 			}
 			return count;
 		}
