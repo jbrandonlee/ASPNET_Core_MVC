@@ -49,8 +49,9 @@ namespace WebApp_ShoppingCart.Controllers
 			string? userId = sessionObj.GetString("userId");
 
 			DBCart.RemoveItem(productId, userId);
-            return Ok();
-        }
+			ViewBag.cartCount = DBCart.GetNonUniqueCount(userId);
+			return Json(new { cartCount = ViewBag.cartCount });
+		}
 
 		public IActionResult Checkout()
 		{

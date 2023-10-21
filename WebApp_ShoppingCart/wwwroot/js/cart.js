@@ -1,6 +1,16 @@
 ﻿// Initialize Total Price
 UpdatePriceDisplay();
 
+// Handle checkout button
+let checkoutLink = document.getElementById("checkoutLink");
+
+function disableCheckout(cartQuantity) {
+	if (cartQuantity == 0) {
+		console.log("Cart is empty.")
+		checkoutLink.classList.add("disable-link");
+	}
+}
+
 // Add 'Input' EventListeners to all QuantityChange fields
 let quantityBtns = document.getElementsByClassName("btn-changeQuantity");
 
@@ -47,7 +57,8 @@ for (let i = 0; i < removeBtns.length; i++) {
 				if (xhr.status === 200) {
 					// Succeed
 					console.log("Removed item successfully.");
-					// UpdateCartCountTo(JSON.parse(this.responseText).cartCount);
+					console.log("cart count is" + JSON.parse(this.responseText).cartCount)
+					disableCheckout(JSON.parse(this.responseText).cartCount);
 				} else {
 					// Report Error
 					console.error("Error removing item. Status code: " + xhr.status);

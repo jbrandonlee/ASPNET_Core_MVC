@@ -129,3 +129,18 @@ span.badge {
 #body-history .card-footer button {
     width: 90%;
 }
+
+/* Nav Links */
+.nav-link {
+    text-decoration: underline;
+}
+
+.cart-link {
+    text-decoration: none !important;
+}
+
+.disable-link {
+    pointer-events: none;
+    color: black !important;
+    text-decoration: none !important;
+}

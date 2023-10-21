@@ -24,11 +24,19 @@
 	<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 		<ul class="navbar-nav flex-grow-1">
 			<li class="nav-item">
-				<a class="nav-link text-primary" asp-area="" asp-controller="Shop" asp-action="Gallery"><u>Continue Shopping</u></a>
+				<a class="nav-link text-primary" asp-area="" asp-controller="Shop" asp-action="Gallery">Continue Shopping</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link text-primary" asp-area="" asp-controller="Cart" asp-action="Checkout"><u>Checkout</u></a>
-			</li>
+			@if (cart != null && cart.Count > 0) {
+				<li class="nav-item">
+					<a class="nav-link text-primary" asp-area="" asp-controller="Cart" asp-action="Checkout" id="checkoutLink">Checkout</a>
+				</li>
+			} else
+			{
+				<li class="nav-item">
+					<a class="nav-link text-primary disable-link" asp-area="" asp-controller="Cart" asp-action="Checkout" id="checkoutLink">Checkout</a>
+				</li>
+			}
+
 		</ul>
 	</div>
 }
