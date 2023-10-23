@@ -74,7 +74,6 @@ namespace WebApp_ShoppingCart.Data
 		// Creates OrderHeader and returns OrderId created
 		public static int CreateOrderHeader(string username)
 		{
-			Console.WriteLine("Create Order Header for:" + username);
 			int orderId;
 			using (SqlConnection conn = new SqlConnection(Data.CONNECTION_STRING))
 			{
